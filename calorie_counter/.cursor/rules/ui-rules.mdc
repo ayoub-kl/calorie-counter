@@ -1,0 +1,16 @@
+# UI Generation Rules
+
+Before generating or modifying any UI:
+
+1. Read `/design/ui-design-rules.md`.
+2. Follow the design rules defined in that file.
+3. Use Figma as the primary UI reference when available.
+4. If a UI screen is missing from Figma, generate it using the same design language.
+5. Reuse existing components whenever possible.
+6. Do not introduce new visual styles.
+
+These rules apply to:
+- screen creation
+- UI refactoring
+- component creation
+- layout changes

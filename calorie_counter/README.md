@@ -75,3 +75,12 @@ These rules are intentionally strict. They are optimized for:
 - trustable AI UX
 - reviewable diffs
 - future extensibility without premature complexity
+
+## UI rules for this project
+
+Agents must read:
+/design/ui-design-rules.md
+
+before generating or modifying any UI.
+
+All UI must follow the design language defined there.

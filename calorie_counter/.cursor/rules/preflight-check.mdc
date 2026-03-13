@@ -1,0 +1,21 @@
+# Repository Preflight Check
+
+Before implementing any new feature:
+
+1. Scan the repository.
+2. Identify existing documentation, architecture files, and design rules.
+3. Verify whether all required files exist.
+
+Required files:
+
+/design/ui-design-rules.md
+/design/screen-registry.md
+/docs/architecture.md
+/docs/api.md
+/docs/app-flow.md
+
+If required files are missing:
+- Report them
+- Ask the user whether to generate them
+
+Do not begin implementation until the repository audit is complete.
