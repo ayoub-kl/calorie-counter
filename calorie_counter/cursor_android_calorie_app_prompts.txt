@@ -1,51 +1,97 @@
+------------------------------------------------------------
+PROMPT 1 — ANDROID PROJECT SKELETON & ARCHITECTURE
+------------------------------------------------------------
 
-============================================================
-PROMPT 1 — PROJECT ARCHITECTURE
-============================================================
-You are working inside the Calorie Counter Android app project.
+You are working inside the Calorie Counter Android app repository.
 
-First read:
-- `.cursor/rules/`
-- `/docs/`
+Before generating code, read:
 
-Your task is to generate the initial Android project architecture for the MVP.
+* `.cursor/rules/`
+* `/docs/`
 
-Stack:
-- Kotlin
-- Jetpack Compose
-- Clean architecture
-- Hilt dependency injection
-- Retrofit networking
-- Room database
-- CameraX for camera
-- Coroutines + Flow
+Your task is to generate the initial Android project skeleton and architecture for the MVP.
 
-MVP features:
-1. Meal type selection
-2. Camera capture
-3. Photo preview
-4. AI meal analysis loading
-5. Meal result screen
-6. Ability to edit foods
-7. Save meal locally
-8. Meal history
+Tech stack:
 
-Tasks:
-1. Generate the recommended folder structure
-2. Generate core modules/packages
-3. Define domain models (Meal, FoodItem, NutritionTotals, MealAnalysisResult)
-4. Define DTO models for AI backend
-5. Define Room entities
-6. Define Repository interfaces
-7. Define UseCases
-8. Create ViewModel skeletons
-9. Define Navigation routes
+* Kotlin
+* Jetpack Compose
+* Clean architecture
+* Hilt dependency injection
+* Retrofit networking
+* Room database
+* CameraX
+* Coroutines + Flow
+
+First create the Android project structure.
+
+Generate:
+
+Project configuration
+
+* settings.gradle.kts
+* build.gradle.kts (project level)
+* gradle.properties
+
+App module
+
+* app/build.gradle.kts
+* AndroidManifest.xml
+
+Main application files
+
+* MainActivity.kt
+* CalorieApp.kt (Application class)
+
+Then generate the architecture structure.
+
+Create packages:
+
+app/src/main/java/com/calorieai/app/
+
+* ui
+* ui/screens
+* ui/components
+* navigation
+* domain
+* domain/model
+* domain/usecase
+* data
+* data/api
+* data/repository
+* data/local
+* camera
+* analysis
+* util
+
+Define initial architecture skeleton:
+
+1. Domain models
+
+   * Meal
+   * FoodItem
+   * NutritionTotals
+   * MealAnalysisResult
+
+2. DTO models for the AI backend
+
+3. Room entities
+
+4. Repository interfaces
+
+5. UseCase classes
+
+6. ViewModel skeletons
+
+7. Navigation routes
 
 Important:
-Follow the architecture defined in `.cursor/rules`.
-Do NOT implement full UI yet.
-Focus on clean architecture skeleton.
-Ensure models support AI corrections.
+
+* Follow architecture rules from `.cursor/rules`
+* Do NOT implement UI yet
+* Do NOT implement networking yet
+* Only create architecture and project skeleton
+* Ensure models support AI corrections
+
 
 ------------------------------------------------------------
 PROMPT 2 — GRADLE AND DEPENDENCIES
@@ -98,6 +144,21 @@ Tasks:
 4. Ensure arguments are minimal
 5. Do not pass bitmaps between screens
 
+
+------------------------------------------------------------
+PROMPT 3.5 — DESIGN SYSTEM
+------------------------------------------------------------
+Create UI components:
+
+- PrimaryButton
+- SecondaryButton
+- MealCard
+- FoodRow
+- NutritionSummary
+- LoadingIndicator
+- ErrorState
+
+
 ------------------------------------------------------------
 PROMPT 4 — MEAL TYPE SELECTION SCREEN
 ------------------------------------------------------------
@@ -121,6 +182,21 @@ Architecture:
 - ViewModel
 - UI state class
 - composable screen
+
+
+------------------------------------------------------------
+PROMPT 4.5 — Implement Dashboard Screen
+------------------------------------------------------------
+
+Create DashboardScreen.kt.
+
+Responsibilities:
+- show daily summary
+- show meal slots (breakfast/lunch/dinner/snack)
+- show progress preview
+- provide main Add Meal action
+
+Follow the canonical Figma variant.
 
 ------------------------------------------------------------
 PROMPT 5 — CAMERA CAPTURE SCREEN
@@ -318,21 +394,10 @@ Handle:
 - invalid AI response
 - database error
 
-------------------------------------------------------------
-PROMPT 16 — DESIGN SYSTEM
-------------------------------------------------------------
-Create UI components:
 
-- PrimaryButton
-- SecondaryButton
-- MealCard
-- FoodRow
-- NutritionSummary
-- LoadingIndicator
-- ErrorState
 
 ------------------------------------------------------------
-PROMPT 17 — IMAGE COMPRESSION
+PROMPT 16 — IMAGE COMPRESSION
 ------------------------------------------------------------
 Implement compression before upload.
 
@@ -342,7 +407,7 @@ Requirements:
 - avoid large uploads
 
 ------------------------------------------------------------
-PROMPT 18 — UNIT TESTS
+PROMPT 17 — UNIT TESTS
 ------------------------------------------------------------
 Add tests for:
 
@@ -352,7 +417,7 @@ Add tests for:
 - ViewModel states
 
 ------------------------------------------------------------
-PROMPT 19 — PERFORMANCE
+PROMPT 18 — PERFORMANCE
 ------------------------------------------------------------
 Optimize performance.
 
@@ -362,7 +427,7 @@ Focus:
 - loading states
 
 ------------------------------------------------------------
-PROMPT 20 — FINAL QA PASS
+PROMPT 19 — FINAL QA PASS
 ------------------------------------------------------------
 Perform full QA.
 

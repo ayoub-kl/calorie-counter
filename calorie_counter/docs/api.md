@@ -38,3 +38,5 @@ Potential fields:
 - units must be explicit
 - partial results must be allowed and handled
 - confidence fields should be optional only if product/backend intentionally allows omission
+
+BASE_URL = http://localhost:8080
