@@ -1,0 +1,153 @@
+---
+description: Android architecture, layering, state management, and implementation discipline for the calorie counter app
+globs:
+  - "**/*.kt"
+  - "**/*.kts"
+alwaysApply: true
+---
+
+# Android architecture rules
+
+## Default stack assumptions
+
+Unless the repository already defines something else, assume:
+- Kotlin
+- Jetpack Compose
+- Hilt
+- Navigation Compose
+- Retrofit + OkHttp
+- Room
+- Coroutines + Flow
+- Coil
+- CameraX
+- Gradle Kotlin DSL
+
+Do not introduce competing frameworks without a strong technical reason.
+
+## Required separation of concerns
+
+Keep responsibilities explicit.
+
+### UI layer
+Responsible for:
+- rendering immutable UI state
+- handling user input callbacks
+- showing loading, empty, content, error states
+- navigation triggers
+
+UI layer must not:
+- call network services directly
+- call DAOs directly
+- parse raw JSON
+- contain nutrition business logic
+- contain persistence mapping logic
+
+### Presentation layer (ViewModels)
+Responsible for:
+- exposing screen state via StateFlow or equivalent
+- receiving user actions/intents
+- orchestrating use cases
+- mapping domain results into UI state
+- emitting one-off UI events when needed
+
+ViewModels must remain orchestration-focused.
+Do not move heavy business rules into ViewModels if those rules belong in pure domain code.
+
+### Domain layer
+Responsible for:
+- use cases
+- validation rules
+- normalization of meal analysis results
+- calorie/macro totals
+- confidence handling
+- edit/save logic
+
+Where practical, domain logic should be pure and easily unit-testable.
+
+### Data layer
+Responsible for:
+- Retrofit services
+- Room DAOs
+- repositories
+- DTO to domain mapping
+- local persistence and caching strategy
+
+## Package and module structure
+
+Prefer a disciplined structure such as:
+- app/
+- core/
+  - common/
+  - ui/
+  - designsystem/
+  - network/
+  - database/
+  - model/
+- domain/
+- feature/onboarding/
+- feature/home/
+- feature/mealtypeselect/
+- feature/camera/
+- feature/mealcapture/
+- feature/mealresult/
+- feature/history/
+- feature/settings/
+
+If the project remains single-module early on, preserve separation through package structure:
+- ui
+- presentation
+- domain
+- data
+- model
+
+## State management rules
+
+Each screen should use explicit state modeling.
+
+Preferred approach:
+- one `UiState` data class for durable screen state
+- one `UiEvent` sealed interface for one-off events if needed
+- action functions or `UserAction` sealed types for user input
+
+Every screen should explicitly account for:
+- loading
+- empty
+- content
+- recoverable error
+- non-recoverable error if relevant
+
+Avoid scattered primitive-flag state when a coherent state model is more appropriate.
+
+## Navigation rules
+
+Canonical screens:
+- splash/startup
+- onboarding (optional)
+- home
+- meal type selection
+- camera capture
+- photo review/retake
+- analysis loading
+- meal result details
+- meal correction/edit
+- history
+- meal detail from history
+- settings
+
+Navigation rules:
+- keep route names stable and explicit
+- pass only minimal arguments
+- pass IDs or URIs instead of heavy objects
+- do not pass bitmaps through navigation
+- persist in-progress capture state where appropriate
+
+## Editing discipline
+
+When implementing features:
+1. inspect nearby files first
+2. follow sound existing patterns
+3. make the smallest correct change
+4. update all impacted layers, not only the nearest file
+5. keep diffs reviewable
+
+Do not create half-wired implementations that compile but do not fit the app architecture.

@@ -1,0 +1,374 @@
+
+============================================================
+PROMPT 1 — PROJECT ARCHITECTURE
+============================================================
+You are working inside the Calorie Counter Android app project.
+
+First read:
+- `.cursor/rules/`
+- `/docs/`
+
+Your task is to generate the initial Android project architecture for the MVP.
+
+Stack:
+- Kotlin
+- Jetpack Compose
+- Clean architecture
+- Hilt dependency injection
+- Retrofit networking
+- Room database
+- CameraX for camera
+- Coroutines + Flow
+
+MVP features:
+1. Meal type selection
+2. Camera capture
+3. Photo preview
+4. AI meal analysis loading
+5. Meal result screen
+6. Ability to edit foods
+7. Save meal locally
+8. Meal history
+
+Tasks:
+1. Generate the recommended folder structure
+2. Generate core modules/packages
+3. Define domain models (Meal, FoodItem, NutritionTotals, MealAnalysisResult)
+4. Define DTO models for AI backend
+5. Define Room entities
+6. Define Repository interfaces
+7. Define UseCases
+8. Create ViewModel skeletons
+9. Define Navigation routes
+
+Important:
+Follow the architecture defined in `.cursor/rules`.
+Do NOT implement full UI yet.
+Focus on clean architecture skeleton.
+Ensure models support AI corrections.
+
+------------------------------------------------------------
+PROMPT 2 — GRADLE AND DEPENDENCIES
+------------------------------------------------------------
+Implement the Gradle setup for the project.
+
+Tasks:
+1. Configure dependencies:
+   - Jetpack Compose
+   - Hilt
+   - Retrofit
+   - Room
+   - CameraX
+   - Coroutines
+   - Navigation Compose
+   - Coil
+
+2. Configure:
+   - kapt for Hilt and Room
+   - Kotlin compiler settings
+   - Compose configuration
+
+3. Add modules if needed:
+   - app
+   - core
+   - feature
+   - domain
+
+Ensure the project builds successfully.
+
+------------------------------------------------------------
+PROMPT 3 — NAVIGATION SETUP
+------------------------------------------------------------
+Implement navigation using Navigation Compose.
+
+Routes:
+- MealTypeSelection
+- CameraCapture
+- PhotoPreview
+- AnalysisLoading
+- MealResult
+- MealEdit
+- MealHistory
+- MealDetail
+
+Tasks:
+1. Create routes
+2. Create navigation graph
+3. Connect routes to placeholder screens
+4. Ensure arguments are minimal
+5. Do not pass bitmaps between screens
+
+------------------------------------------------------------
+PROMPT 4 — MEAL TYPE SELECTION SCREEN
+------------------------------------------------------------
+Implement the Meal Type Selection screen.
+
+UI:
+- Breakfast
+- Lunch
+- Dinner
+- Snack
+
+Design:
+- card UI
+- modern spacing
+- Compose components
+
+Behavior:
+Selecting a meal navigates to CameraCapture.
+
+Architecture:
+- ViewModel
+- UI state class
+- composable screen
+
+------------------------------------------------------------
+PROMPT 5 — CAMERA CAPTURE SCREEN
+------------------------------------------------------------
+Implement camera capture using CameraX.
+
+Capabilities:
+- open camera
+- capture photo
+- retake photo
+
+Rules:
+- avoid large bitmap memory usage
+- store image as file or URI
+
+Navigation:
+After capture navigate to PhotoPreview.
+
+------------------------------------------------------------
+PROMPT 6 — PHOTO PREVIEW SCREEN
+------------------------------------------------------------
+Implement Photo Preview.
+
+UI:
+- show image
+- buttons:
+  - Retake
+  - Analyze Meal
+
+Behavior:
+Retake → CameraCapture
+Analyze → AnalysisLoading
+
+------------------------------------------------------------
+PROMPT 7 — BACKEND API CONTRACT
+------------------------------------------------------------
+Implement networking layer.
+
+Tasks:
+1. Retrofit service:
+   analyzeMealPhoto()
+
+2. DTO models:
+- foods detected
+- calories
+- protein
+- carbs
+- fat
+- quantity
+- confidence
+
+3. Repository method:
+analyzeMealPhoto(imageUri, mealType)
+
+Rules:
+Validate AI responses.
+Handle null fields.
+Normalize numbers.
+
+------------------------------------------------------------
+PROMPT 8 — ANALYSIS LOADING SCREEN
+------------------------------------------------------------
+Implement Analysis Loading.
+
+Behavior:
+1. Call analyzeMealPhoto()
+2. Show loading animation
+3. Handle errors
+
+States:
+- loading
+- network error
+- invalid response
+- success
+
+On success navigate to MealResult.
+
+------------------------------------------------------------
+PROMPT 9 — MEAL RESULT SCREEN
+------------------------------------------------------------
+Implement Meal Result screen.
+
+Display:
+- detected foods
+- calories
+- protein
+- carbs
+- fat
+- totals
+
+UI:
+- food list
+- nutrition summary
+- confidence indicator
+
+Actions:
+- edit
+- delete
+- add food
+- save meal
+
+------------------------------------------------------------
+PROMPT 10 — MEAL EDITING
+------------------------------------------------------------
+Implement editing capability.
+
+User can:
+- edit quantity
+- edit unit
+- remove food
+- add food
+
+Rules:
+Totals update automatically.
+Mark meal as userEdited.
+
+------------------------------------------------------------
+PROMPT 11 — ROOM DATABASE
+------------------------------------------------------------
+Implement Room persistence.
+
+Tables:
+MealEntity
+FoodItemEntity
+
+Meal fields:
+- id
+- mealType
+- timestamp
+- totalCalories
+- totalProtein
+- totalCarbs
+- totalFat
+- userEdited
+
+FoodItem fields:
+- id
+- mealId
+- name
+- quantity
+- calories
+- protein
+- carbs
+- fat
+
+------------------------------------------------------------
+PROMPT 12 — SAVE MEAL
+------------------------------------------------------------
+Implement saving meals.
+
+Flow:
+MealResult → Save
+
+Tasks:
+1. Map domain models to Room entities
+2. Insert meal and foods
+3. Return success state
+
+------------------------------------------------------------
+PROMPT 13 — MEAL HISTORY
+------------------------------------------------------------
+Implement Meal History.
+
+Features:
+- list meals
+- show meal type
+- calories
+- timestamp
+
+Click item → MealDetail
+
+------------------------------------------------------------
+PROMPT 14 — MEAL DETAIL
+------------------------------------------------------------
+Implement Meal Detail screen.
+
+Display:
+- meal info
+- foods
+- macros
+- totals
+
+Allow editing if userEdited.
+
+------------------------------------------------------------
+PROMPT 15 — ERROR HANDLING
+------------------------------------------------------------
+Implement structured errors.
+
+Handle:
+- camera unavailable
+- permission denied
+- network failure
+- API error
+- invalid AI response
+- database error
+
+------------------------------------------------------------
+PROMPT 16 — DESIGN SYSTEM
+------------------------------------------------------------
+Create UI components:
+
+- PrimaryButton
+- SecondaryButton
+- MealCard
+- FoodRow
+- NutritionSummary
+- LoadingIndicator
+- ErrorState
+
+------------------------------------------------------------
+PROMPT 17 — IMAGE COMPRESSION
+------------------------------------------------------------
+Implement compression before upload.
+
+Requirements:
+- reduce resolution
+- keep recognition quality
+- avoid large uploads
+
+------------------------------------------------------------
+PROMPT 18 — UNIT TESTS
+------------------------------------------------------------
+Add tests for:
+
+- DTO mapping
+- nutrition totals
+- repository logic
+- ViewModel states
+
+------------------------------------------------------------
+PROMPT 19 — PERFORMANCE
+------------------------------------------------------------
+Optimize performance.
+
+Focus:
+- bitmap memory
+- recompositions
+- loading states
+
+------------------------------------------------------------
+PROMPT 20 — FINAL QA PASS
+------------------------------------------------------------
+Perform full QA.
+
+Tasks:
+- remove dead code
+- remove unused imports
+- verify architecture rules
+- verify UI states
+- check navigation safety

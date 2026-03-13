@@ -1,0 +1,67 @@
+---
+description: CameraX, image handling, upload preparation, and mobile performance rules for the calorie counter app
+globs:
+  - "**/*.kt"
+alwaysApply: true
+---
+
+# Camera, image, and performance rules
+
+## Camera implementation bias
+
+Prefer CameraX for capture flows.
+Keep camera concerns isolated from general screen rendering and domain logic.
+
+Do not create a giant camera screen that mixes:
+- permission management
+- camera binding
+- image processing
+- upload orchestration
+- UI state modeling
+- domain logic
+
+## Image handling rules
+
+Meal photos can be large and memory-heavy.
+
+Always:
+- avoid retaining full-size bitmaps longer than necessary
+- prefer URI/file-reference based flows over giant in-memory objects
+- resize/compress before upload according to backend requirements
+- preserve enough quality for food recognition
+- clean up temporary files when they are no longer needed
+- model failure paths for blur, no image, or failed processing
+
+Do not hardcode image dimensions unless product/backend requirements define them.
+
+## Permission and failure handling
+
+The user experience must gracefully handle:
+- camera permission denied
+- camera temporarily unavailable
+- user canceling capture
+- corrupted temp files
+- upload failure after capture
+- analysis failure after upload
+
+Each of these should lead to a coherent user path, not a dead end.
+
+## Performance rules
+
+This is a mobile image-heavy app. Performance is part of product quality.
+
+Avoid:
+- heavy work on the main thread
+- repeated decoding of the same image without need
+- repeated identical analysis requests
+- excessive recompositions in Compose
+- long-lived giant objects in screen state
+
+Prefer:
+- background work for image processing
+- stable and minimal UI state
+- lazy lists for history
+- bounded memory use
+- careful cleanup of temporary resources
+
+Do not prematurely micro-optimize, but do address obvious mobile bottlenecks.

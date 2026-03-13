@@ -1,0 +1,80 @@
+---
+description: Global product context and non-negotiable product truths for the calorie counter Android app
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Global product context
+
+## Product summary
+
+This repository builds an Android app that logs meals from camera photos using AI.
+
+Canonical core flow:
+1. User opens app
+2. User chooses meal type: breakfast, lunch, dinner, snack
+3. User opens camera
+4. User takes or confirms a meal photo
+5. App sends the photo to backend AI analysis
+6. App receives structured nutrition estimation data
+7. App shows detected food items, estimated calories, macros, confidence, and editable results
+8. User confirms or corrects the result
+9. Meal is saved to history
+
+## Product truths
+
+These are non-negotiable:
+
+- This is not a camera demo. It is a meal logging app.
+- AI output is an estimate, not truth.
+- The product must preserve user trust.
+- The user must be able to correct AI results.
+- The system must never present uncertain AI output as fully authoritative.
+- Clean data flow matters more than clever implementation shortcuts.
+
+## UX principles
+
+The app should feel:
+- fast
+- clean
+- modern
+- mobile-first
+- easy to scan
+- easy to correct
+- trustworthy when AI is uncertain
+
+## Agent behavior expectations
+
+When coding for this repository:
+- prioritize correctness over speed
+- prefer explicit architecture over hidden magic
+- do not invent missing contracts silently
+- do not fabricate production behavior when requirements are missing
+- keep implementation maintainable and reviewable
+- if product detail is missing, leave an explicit TODO or assumption comment instead of pretending certainty
+
+## MVP expectations
+
+Default MVP includes:
+- meal type selection
+- photo capture
+- photo review / retake
+- AI analysis request
+- editable meal result screen
+- local meal save
+- meal history
+- settings/basic preferences
+
+Default MVP does NOT require unless the repo explicitly adds them:
+- mandatory account creation
+- cloud sync
+- barcode scanning
+- health platform integration
+- recommendation engine
+- complex social features
+
+## Architectural bias
+
+Prefer local-first design unless product requirements force cloud-first behavior.
+The app may use a backend for AI analysis, but the meal log should remain coherent and useful locally.

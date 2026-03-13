@@ -1,0 +1,108 @@
+---
+description: Compose UI, screen behavior, and UX rules for the calorie counter Android app
+globs:
+  - "**/*.kt"
+alwaysApply: true
+---
+
+# Compose UI and UX rules
+
+## Core UX principle
+
+The app must make AI-assisted meal logging feel easy and trustworthy.
+If AI is uncertain or wrong, the UI must make correction obvious and low-friction.
+
+## Compose implementation rules
+
+Use Jetpack Compose idiomatically.
+
+- keep composables focused and reasonably small
+- prefer stateless reusable components with state hoisted upward
+- extract reusable components for meal cards, macro rows, editable food rows, loading cards, error states, empty states, and camera controls
+- use previews where useful
+- keep visual hierarchy clean and easy to scan
+
+Do not:
+- call network APIs directly in composables
+- query Room directly in composables
+- place non-trivial business logic inside UI rendering code
+- create huge unreadable screen files unless clearly sectioned and justified
+
+## Screen-state UX rules
+
+Every primary screen should explicitly support the correct UX states.
+
+### Meal type selection
+- show clear meal categories
+- breakfast/lunch/dinner/snack should be visually distinct but consistent
+- selection must be easy with one hand
+
+### Camera capture
+- clear primary action to capture
+- retake path must be obvious
+- handle permission denial gracefully
+- handle camera unavailable state gracefully
+
+### Photo review
+- show selected photo clearly
+- make confirm and retake actions obvious
+- never trap the user into upload with no review path if review is part of the chosen UX
+
+### Analysis loading
+- show progress or clear waiting feedback
+- explain that AI is analyzing the meal photo
+- avoid misleading certainty while waiting
+
+### Meal result screen
+Must clearly present:
+- detected food items
+- estimated calories/macros
+- confidence or uncertainty indicators when relevant
+- edit/remove/add-food actions
+- confirm/save action
+
+### History screen
+- use lazy lists
+- make meal cards scannable
+- show meal type, time, calories, and correction state if useful
+
+## Visual design rules
+
+The app should feel:
+- clean
+- modern
+- spacious
+- premium enough to feel intentional
+- simple enough to feel fast
+
+Standardize:
+- spacing
+- typography
+- corner radii
+- elevation
+- button hierarchy
+- icon usage
+- loading and empty states
+
+Do not create multiple nearly-identical components with inconsistent styling.
+
+## Accessibility and usability rules
+
+Always consider:
+- sufficient touch targets
+- readable text hierarchy
+- clear content grouping
+- labels that make sense without color alone
+- obvious retry actions on recoverable failure
+- obvious save and correction paths
+
+## Trust-preserving wording rules
+
+Avoid overstating certainty.
+Prefer language patterns that reflect estimation when appropriate, such as:
+- estimated calories
+- detected foods
+- low-confidence result
+- review before saving
+
+Do not present AI output as medical or nutritional certainty.

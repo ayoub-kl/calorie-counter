@@ -1,0 +1,87 @@
+---
+description: Persistence, repository, Room, Retrofit, DTO mapping, and API integration rules
+globs:
+  - "**/data/**/*"
+  - "**/network/**/*"
+  - "**/*.kt"
+alwaysApply: true
+---
+
+# Data, persistence, and network rules
+
+## Core rule
+
+Keep DTOs, database entities, and domain models separate.
+
+Never:
+- expose Retrofit DTOs directly to UI
+- expose Room entities directly to UI
+- use generic maps where typed models are appropriate
+
+Use explicit mappers between layers.
+
+## Room rules
+
+Room entities should reflect persistence concerns, not screen concerns.
+
+Suggested entities may include:
+- meals
+- meal_food_items
+- pending_uploads
+- analysis_attempts
+- user_preferences
+
+Persistence principles:
+- use stable IDs
+- keep timestamps consistent
+- separate parent meal records from child food items
+- plan for schema migration discipline
+- do not use one giant table for unrelated concerns
+
+## Repository rules
+
+Repositories are the boundary between domain and data sources.
+
+Repositories should:
+- hide DTO/entity details from domain consumers
+- coordinate local and remote data sources
+- return normalized results or typed failures
+- encapsulate persistence/update behavior
+
+## Networking rules
+
+Define requests and responses explicitly.
+
+Always:
+- create typed request DTOs
+- create typed response DTOs
+- map DTOs to domain models
+- handle empty responses
+- handle timeout/errors/parsing failures
+- isolate base URL/header/interceptor logic
+
+Do not:
+- parse JSON manually in many places
+- spread API configuration through unrelated files
+- leak raw Retrofit response types into UI-facing layers
+
+## Default backend flow
+
+Preferred high-level flow:
+1. app captures image
+2. app uploads photo or sends a photo reference
+3. backend returns structured meal analysis response
+4. app validates and normalizes the response
+5. app presents editable result screen
+6. app persists confirmed/corrected meal
+
+## Offline/local-first bias
+
+Default assumption:
+- AI analysis may require network
+- saved meal history should remain locally accessible
+- recoverable failures should preserve user trust
+
+If cloud sync does not yet exist:
+- do not force unnecessary account architecture into every path
+- keep local persistence clean so sync can be added later

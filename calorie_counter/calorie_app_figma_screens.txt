@@ -1,0 +1,312 @@
+
+============================================================
+SCREEN 1 — Splash Screen
+============================================================
+Title:
+Splash Screen
+
+Description:
+A clean startup screen shown while the app loads.
+
+The screen displays the app logo centered on the screen with a subtle gradient background inspired by health and nutrition themes (fresh green, soft neutral tones).
+Below the logo there is a small loading indicator.
+
+Purpose:
+- initialize app
+- load preferences
+- prepare navigation
+
+Elements:
+- centered app logo
+- subtle animated loader
+- soft gradient background
+
+------------------------------------------------------------
+SCREEN 2 — Onboarding Introduction
+------------------------------------------------------------
+Title:
+Onboarding Introduction
+
+Description:
+A welcoming introduction screen explaining what the app does.
+
+The layout contains a friendly illustration of taking a photo of food with a smartphone and receiving calorie information.
+
+Text explains:
+"Track your meals instantly. Just take a photo and we'll estimate calories and nutrition."
+
+Buttons:
+- Get Started
+- Skip
+
+Elements:
+- illustration
+- headline
+- short explanation
+- primary call-to-action button
+
+------------------------------------------------------------
+SCREEN 3 — Meal Type Selection
+------------------------------------------------------------
+Title:
+Meal Type Selection
+
+Description:
+A screen where the user chooses what type of meal they are about to log.
+
+Four large cards arranged in a grid:
+- Breakfast
+- Lunch
+- Dinner
+- Snack
+
+Each card has:
+- icon
+- label
+- soft color variation
+
+Elements:
+- title: "What meal is this?"
+- four selectable meal cards
+
+------------------------------------------------------------
+SCREEN 4 — Food Camera Capture
+------------------------------------------------------------
+Title:
+Food Camera Capture
+
+Description:
+Full-screen camera preview used to capture the meal photo.
+
+Overlay UI:
+
+Top bar:
+- back button
+- flash toggle
+
+Bottom:
+- large circular capture button
+- gallery icon (optional)
+
+Design goal:
+clean, distraction-free camera experience optimized for food photography.
+
+------------------------------------------------------------
+SCREEN 5 — Meal Photo Preview
+------------------------------------------------------------
+Title:
+Meal Photo Preview
+
+Description:
+After taking a photo, the user sees a preview of the captured meal.
+
+The photo is displayed prominently.
+
+Buttons:
+- Retake Photo
+- Analyze Meal
+
+Elements:
+- image preview
+- retake button
+- analyze button (primary CTA)
+
+------------------------------------------------------------
+SCREEN 6 — Analyzing Your Meal
+------------------------------------------------------------
+Title:
+Analyzing Your Meal
+
+Description:
+Loading screen while the AI analyzes the meal photo.
+
+Background:
+blurred meal image.
+
+Foreground:
+- animated loading indicator
+- text: "Analyzing your meal..."
+- optional tips explaining the analysis process.
+
+------------------------------------------------------------
+SCREEN 7 — Meal Analysis Result
+------------------------------------------------------------
+Title:
+Meal Analysis Result
+
+Description:
+Displays detected foods and estimated nutrition.
+
+Top:
+meal photo
+
+Middle:
+list of detected foods with:
+- name
+- quantity
+- calories
+- macro indicators
+
+Bottom:
+nutrition summary card:
+- total calories
+- protein
+- carbs
+- fat
+
+Actions:
+- Edit Meal
+- Save Meal
+
+------------------------------------------------------------
+SCREEN 8 — Edit Detected Foods
+------------------------------------------------------------
+Title:
+Edit Detected Foods
+
+Description:
+Allows the user to correct AI predictions.
+
+Each food item can be edited:
+- quantity
+- unit
+- remove item
+
+Users can add a new food manually.
+
+Elements:
+- editable food list
+- add food button
+- nutrition totals
+- save changes button
+
+------------------------------------------------------------
+SCREEN 9 — Add Food Manually
+------------------------------------------------------------
+Title:
+Add Food Manually
+
+Description:
+Allows the user to manually add a food item not detected by AI.
+
+Inputs:
+- food name
+- quantity
+- unit
+
+Actions:
+- cancel
+- add food
+
+------------------------------------------------------------
+SCREEN 10 — Meal Saved
+------------------------------------------------------------
+Title:
+Meal Saved
+
+Description:
+Confirmation screen displayed after saving a meal.
+
+Elements:
+- success checkmark icon
+- text: "Meal logged successfully"
+
+Actions:
+- view meal details
+- go to history
+- log another meal
+
+------------------------------------------------------------
+SCREEN 11 — Meal History
+------------------------------------------------------------
+Title:
+Meal History
+
+Description:
+Displays a scrollable list of previously logged meals.
+
+Each item shows:
+- meal type
+- photo thumbnail
+- calories
+- timestamp
+
+Users can tap a meal to open details.
+
+Optional:
+daily calorie totals shown at the top.
+
+------------------------------------------------------------
+SCREEN 12 — Meal Details
+------------------------------------------------------------
+Title:
+Meal Details
+
+Description:
+Displays full information of a logged meal.
+
+Top:
+meal photo, meal type, timestamp
+
+Middle:
+list of foods
+
+Bottom:
+nutrition summary
+
+Users may edit the meal if corrections are allowed.
+
+------------------------------------------------------------
+SCREEN 13 — App Settings
+------------------------------------------------------------
+Title:
+App Settings
+
+Description:
+Allows configuration of preferences.
+
+Options may include:
+- daily calorie goal
+- units (grams or ounces)
+- notifications
+- privacy settings
+
+Design should be simple and structured.
+
+------------------------------------------------------------
+SCREEN 14 — Food Not Detected
+------------------------------------------------------------
+Title:
+Food Not Detected
+
+Description:
+Shown when AI fails to detect food in the photo.
+
+Elements:
+- illustration
+- message explaining the issue
+
+Suggestions:
+- retake photo
+- ensure food is clearly visible
+
+Buttons:
+- Retake Photo
+- Enter Meal Manually
+
+------------------------------------------------------------
+SCREEN 15 — Connection Error
+------------------------------------------------------------
+Title:
+Connection Error
+
+Description:
+Displayed when the app cannot reach the analysis service.
+
+Elements:
+- connection error illustration
+- message: "Unable to analyze your meal"
+
+Actions:
+- retry
+- cancel

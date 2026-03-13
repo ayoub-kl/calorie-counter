@@ -1,0 +1,113 @@
+---
+description: Rules for AI meal analysis, contracts, validation, normalization, and correction-first flows
+globs:
+  - "**/data/**/*"
+  - "**/domain/**/*"
+  - "**/network/**/*"
+  - "**/*.kt"
+alwaysApply: true
+---
+
+# AI analysis contract and validation rules
+
+## Critical principle
+
+Treat all AI/backend meal-analysis output as untrusted external input.
+
+Never assume it is:
+- complete
+- correctly typed
+- numerically valid
+- internally consistent
+- high confidence
+- ready for direct UI rendering or persistence
+
+## Required response discipline
+
+Whenever consuming an analysis response:
+- validate schema and nullability
+- validate numeric ranges where applicable
+- normalize units
+- handle missing or partial food items
+- handle missing macros
+- sanitize labels
+- compute totals defensively
+- support low-confidence results
+
+Never pass raw external DTOs directly into UI.
+Never persist unnormalized external data as if it were canonical domain truth.
+
+## Preferred domain model shape
+
+Unless the repository already defines an approved equivalent, domain concepts should support fields such as:
+- analysis id
+- meal type
+- capture timestamp
+- image URI/reference
+- analysis status
+- foods[]
+  - name
+  - estimated quantity
+  - unit
+  - calories
+  - protein_g
+  - carbs_g
+  - fat_g
+  - confidence
+- total calories
+- total protein
+- total carbs
+- total fat
+- overall confidence
+- userEdited flag
+
+Do not invent extra nutrition fields unless there is a product or backend requirement.
+
+## Correction-first requirements
+
+The result screen must support correction-first UX.
+Users must be able to:
+- remove a detected food
+- add a missing food
+- edit quantity
+- edit unit if product allows
+- adjust nutrition values if product allows
+- save a corrected result
+
+If edits are supported:
+- keep AI-estimated values separate from corrected values where useful
+- persist corrected values as canonical saved data
+- mark the meal as user-corrected
+
+## Error categories to model explicitly
+
+Prefer typed domain/app errors such as:
+- network unavailable
+- timeout
+- upload failed
+- invalid server response
+- no food detected
+- low-confidence analysis
+- local save failed
+- permission denied
+- camera unavailable
+
+Do not swallow parsing or validation failures silently.
+
+## Raw payload handling
+
+If raw AI responses are stored for debugging or auditability:
+- store them only if product/security policy allows it
+- do not expose them directly to UI
+- do not log sensitive data excessively
+- avoid storing oversized payloads without clear value
+
+## Future-proofing
+
+Write this layer so it can later support:
+- user feedback loops
+- corrected meal learning signals
+- multiple backend providers/models
+- schema evolution
+
+But do not prematurely overengineer these paths if not requested.

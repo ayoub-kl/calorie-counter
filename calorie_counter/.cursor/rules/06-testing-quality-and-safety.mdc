@@ -1,0 +1,90 @@
+---
+description: Testing, safety, validation, logging, and code quality expectations for the calorie counter app
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Testing, quality, and safety rules
+
+## Testing priorities
+
+For non-trivial changes, add or update tests.
+
+Highest-value test targets:
+1. DTO -> domain mapping
+2. AI response normalization/validation
+3. calorie and macronutrient total calculation
+4. correction flows
+5. repository behavior
+6. ViewModel state transitions
+7. error and retry paths
+
+Preferred tools:
+- JUnit
+- MockK
+- Turbine
+- Compose UI tests
+
+## Minimal testing rule
+
+If time is limited, prioritize tests for:
+- parsing and validation
+- totals calculation
+- edit/save logic
+- retry/error behavior
+
+## Logging rules
+
+Use logging intentionally.
+
+Good log events include:
+- analysis request started
+- analysis request succeeded
+- analysis request failed
+- meal saved
+- meal save failed
+- correction submitted
+- validation/parsing failure
+
+Do not log:
+- secrets
+- auth tokens
+- raw image data
+- highly sensitive user data unnecessarily
+- noisy spam on every recomposition
+
+## Security and privacy rules
+
+This app handles potentially private meal photos and nutrition data.
+
+Rules:
+- never hardcode secrets or API keys
+- never commit secrets
+- use build config/env/secrets mechanisms
+- minimize sensitive retention
+- delete temporary image files when safe
+- avoid over-logging user content
+
+## Forbidden behaviors
+
+Do not:
+- invent backend fields and pretend they exist
+- invent DB migrations silently
+- hardcode fake production endpoints
+- return unvalidated AI output directly to UI as truth
+- place business logic in composables
+- swallow exceptions silently
+- leave dead code or stale imports behind
+- replace repository architecture wholesale unless explicitly asked
+
+## Reviewability rule
+
+Optimize for:
+- correctness
+- clarity
+- trustable UX behavior
+- maintainable code
+- reviewable diffs
+
+Do not optimize for novelty or clever abstractions at the cost of clarity.

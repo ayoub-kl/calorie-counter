@@ -1,0 +1,55 @@
+---
+description: How Cursor Agent should execute tasks in this repository
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Agent execution behavior
+
+## Before coding
+
+Always:
+- inspect nearby files first
+- infer the current architecture from the actual repo
+- reuse sound existing patterns
+- identify all impacted layers before editing
+
+## During coding
+
+Prefer:
+- the smallest correct change
+- explicit models and state classes
+- repositories and use cases for non-trivial flows
+- pure functions for calculations and normalization
+- defensive parsing and validation
+
+Do not:
+- make broad rewrites unless explicitly requested
+- create half-implemented features that look complete
+- invent API fields or DB columns silently
+- leave call sites inconsistent after model changes
+
+## After coding
+
+Before stopping, verify:
+- impacted imports are clean
+- obvious dead code is removed
+- state models still cover loading/error/content behavior
+- business logic did not leak into UI
+- tests were added/updated for non-trivial changes where practical
+
+## Ambiguity handling
+
+When requirements are incomplete:
+- choose the most conservative maintainable interpretation
+- leave an explicit TODO or assumption comment when genuinely necessary
+- do not fabricate certainty
+
+## Special rule for this product
+
+For anything related to AI meal analysis:
+- preserve editability
+- preserve correction-first UX
+- preserve trust signaling
+- treat uncertainty as a real product concern, not a cosmetic one
