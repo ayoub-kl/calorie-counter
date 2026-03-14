@@ -55,7 +55,12 @@ fun CalorieCounterNavHost(navController: NavHostController) {
 
         composable(NavRoutes.ANALYSIS_LOADING) {
             AnalysisLoadingScreen(
-                onNavigateBack = { navController.navigateUp() }
+                onNavigateBack = { navController.navigateUp() },
+                onAnalysisComplete = {
+                    navController.navigate(NavRoutes.MEAL_RESULT) {
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 
