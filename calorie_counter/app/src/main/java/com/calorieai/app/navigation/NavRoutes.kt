@@ -17,4 +17,7 @@ object NavRoutes {
     const val HISTORY = "history"
     const val MEAL_DETAIL = "meal_detail"
     const val SETTINGS = "settings"
+
+    /** Route with mealId argument. Use for navigating to a specific meal. */
+    fun mealDetail(mealId: String) = "meal_detail/$mealId"
 }
