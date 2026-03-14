@@ -1,0 +1,14 @@
+Review the code you just added for compile issues, navigation issues, missing imports, state issues, and architecture violations.
+
+Tasks:
+1. Fix all compile problems
+2. Fix navigation route mismatches
+3. Fix ViewModel wiring issues
+4. Fix Compose errors and missing imports
+5. Keep the project buildable
+
+Do not add new features.
+Return:
+- files changed
+- fixes made
+- remaining risks

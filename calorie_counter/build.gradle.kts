@@ -1,3 +1,4 @@
+// KSP is used for Hilt and Room (replaces kapt). Kotlin compiler and Compose are configured in app module.
 plugins {
     id("com.android.application") version "8.2.0" apply false
     id("org.jetbrains.kotlin.android") version "1.9.20" apply false
