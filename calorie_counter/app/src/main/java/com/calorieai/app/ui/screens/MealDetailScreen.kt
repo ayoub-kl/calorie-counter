@@ -1,6 +1,5 @@
 package com.calorieai.app.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,7 +37,6 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MealDetailScreen(
-    mealId: String,
     onNavigateBack: () -> Unit,
     onEdit: () -> Unit,
     viewModel: MealDetailViewModel = hiltViewModel(),

@@ -117,10 +117,8 @@ fun CalorieCounterNavHost(navController: NavHostController) {
         composable(
             route = "${NavRoutes.MEAL_DETAIL}/{mealId}",
             arguments = listOf(navArgument("mealId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val mealId = backStackEntry.arguments?.getString("mealId") ?: ""
+        ) {
             MealDetailScreen(
-                mealId = mealId,
                 onNavigateBack = { navController.navigateUp() },
                 onEdit = { navController.navigate(NavRoutes.MEAL_EDIT) }
             )
