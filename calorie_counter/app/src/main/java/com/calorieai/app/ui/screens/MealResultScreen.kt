@@ -67,7 +67,8 @@ fun MealResultScreen(
     ) { paddingValues ->
         when {
             uiState.error != null -> ErrorState(
-                message = uiState.error!!,
+                message = uiState.error!!.userMessage,
+                onRetry = if (uiState.error!!.recoverable) ({ viewModel.clearError() }) else null,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)

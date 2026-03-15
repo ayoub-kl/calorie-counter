@@ -66,7 +66,8 @@ fun HistoryScreen(
                     .padding(paddingValues)
             )
             uiState.error != null -> ErrorState(
-                message = uiState.error!!,
+                message = uiState.error!!.userMessage,
+                onRetry = if (uiState.error!!.recoverable) ({ viewModel.retry() }) else null,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)

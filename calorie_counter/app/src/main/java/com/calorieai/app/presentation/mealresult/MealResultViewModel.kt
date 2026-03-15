@@ -3,6 +3,7 @@ package com.calorieai.app.presentation.mealresult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.calorieai.app.data.AnalysisResultHolder
+import com.calorieai.app.domain.model.AppError
 import com.calorieai.app.domain.model.AnalysisStatus
 import com.calorieai.app.domain.model.FoodItem
 import com.calorieai.app.domain.model.Meal
@@ -35,7 +36,7 @@ class MealResultViewModel @Inject constructor(
     private fun loadFromHolder() {
         val result = resultHolder.lastResult
         if (result == null) {
-            _uiState.value = MealResultUiState(error = "No meal result")
+            _uiState.value = MealResultUiState(error = AppError.MissingResult)
             return
         }
         _uiState.value = MealResultUiState(
@@ -83,6 +84,10 @@ class MealResultViewModel @Inject constructor(
             userEdited = true,
             error = null
         )
+    }
+
+    fun clearError() {
+        _uiState.value = _uiState.value.copy(error = null)
     }
 
     fun updateFood(id: String, quantity: Double, unit: String) {
@@ -139,6 +144,8 @@ class MealResultViewModel @Inject constructor(
                 )
                 mealRepository.saveMeal(meal)
                 _saveSuccess.trySend(Unit)
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(error = AppError.DatabaseError)
             } finally {
                 _isSaving.value = false
             }
@@ -156,7 +163,7 @@ data class MealResultUiState(
     val overallConfidence: Float? = null,
     val userEdited: Boolean = false,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: AppError? = null
 ) {
     val hasContent: Boolean = error == null && foods.isNotEmpty()
     val isEmpty: Boolean = error == null && foods.isEmpty()

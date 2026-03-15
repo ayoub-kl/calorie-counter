@@ -4,9 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.calorieai.app.data.AnalysisResultHolder
+import com.calorieai.app.domain.model.AppError
 import com.calorieai.app.domain.model.MealAnalysisResult
-import com.calorieai.app.navigation.NavRoutes
 import com.calorieai.app.domain.model.MealType
+import com.calorieai.app.navigation.NavRoutes
 import com.calorieai.app.domain.usecase.AnalyzeMealUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -38,7 +39,7 @@ class AnalysisLoadingViewModel @Inject constructor(
     fun runAnalysisOnce() {
         if (hasTriggeredAnalysis) return
         if (imageUri.isBlank()) {
-            _uiState.value = AnalysisLoadingUiState.Error("Invalid image")
+            _uiState.value = AnalysisLoadingUiState.Error(AppError.InvalidAiResponse("Invalid image."))
             return
         }
         hasTriggeredAnalysis = true
@@ -51,9 +52,7 @@ class AnalysisLoadingViewModel @Inject constructor(
                     _navigateToResult.trySend(Unit)
                 }
                 .onFailure { e ->
-                    _uiState.value = AnalysisLoadingUiState.Error(
-                        e.message ?: "Analysis failed"
-                    )
+                    _uiState.value = AnalysisLoadingUiState.Error(AppError.fromThrowable(e))
                 }
         }
     }
@@ -73,5 +72,5 @@ class AnalysisLoadingViewModel @Inject constructor(
 sealed interface AnalysisLoadingUiState {
     data object Loading : AnalysisLoadingUiState
     data object Success : AnalysisLoadingUiState
-    data class Error(val message: String) : AnalysisLoadingUiState
+    data class Error(val error: AppError) : AnalysisLoadingUiState
 }

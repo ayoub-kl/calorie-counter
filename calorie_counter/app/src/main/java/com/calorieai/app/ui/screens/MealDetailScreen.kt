@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.calorieai.app.domain.model.AppError
 import com.calorieai.app.domain.model.MealType
 import com.calorieai.app.presentation.mealdetail.MealDetailViewModel
 import com.calorieai.app.ui.components.ErrorState
@@ -64,14 +65,15 @@ fun MealDetailScreen(
                     .padding(paddingValues)
             )
             uiState.error != null -> ErrorState(
-                message = uiState.error!!,
+                message = uiState.error!!.userMessage,
+                onRetry = if (uiState.error!!.recoverable) ({ viewModel.retry() }) else null,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
                     .padding(24.dp)
             )
             uiState.meal == null -> ErrorState(
-                message = "Meal not found",
+                message = AppError.InvalidMeal.userMessage,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.calorieai.app.domain.model.AppError
 import com.calorieai.app.domain.usecase.GetMealsUseCase
 import javax.inject.Inject
 
@@ -28,7 +29,23 @@ class HistoryViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = e.message ?: "Failed to load history"
+                    error = AppError.DatabaseError
+                )
+            }
+        }
+    }
+
+    fun retry() {
+        _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+        viewModelScope.launch {
+            try {
+                getMealsUseCase.invoke().collect { meals ->
+                    _uiState.value = _uiState.value.copy(meals = meals, isLoading = false, error = null)
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = AppError.DatabaseError
                 )
             }
         }
@@ -37,6 +54,6 @@ class HistoryViewModel @Inject constructor(
 
 data class HistoryUiState(
     val isLoading: Boolean = false,
-    val error: String? = null,
+    val error: AppError? = null,
     val meals: List<com.calorieai.app.domain.model.Meal> = emptyList()
 )

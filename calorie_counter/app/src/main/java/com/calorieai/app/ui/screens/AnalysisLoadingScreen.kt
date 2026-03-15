@@ -66,8 +66,8 @@ fun AnalysisLoadingScreen(
                     modifier = Modifier.fillMaxSize()
                 )
                 is AnalysisLoadingUiState.Error -> ErrorState(
-                    message = state.message,
-                    onRetry = { viewModel.retry() },
+                    message = state.error.userMessage,
+                    onRetry = if (state.error.recoverable) ({ viewModel.retry() }) else null,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(24.dp)

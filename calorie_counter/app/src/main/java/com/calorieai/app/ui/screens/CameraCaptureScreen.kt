@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.calorieai.app.domain.model.AppError
 import com.calorieai.app.ui.components.ErrorState
 import android.content.pm.PackageManager
 import java.io.File
@@ -68,22 +69,22 @@ fun CameraCaptureScreen(
     }
 
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
-    var captureError by remember { mutableStateOf<String?>(null) }
+    var captureError by remember { mutableStateOf<AppError?>(null) }
 
     LaunchedEffect(Unit) {
         val hasCamera = context.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_CAMERA_ANY)
-        if (!hasCamera) captureError = "Camera not available"
+        if (!hasCamera) captureError = AppError.CameraUnavailable
     }
 
     when {
         permissionDenied && !hasPermission -> ErrorState(
-            message = "Camera permission is required to capture meal photos.",
+            message = AppError.PermissionDenied.userMessage,
             onRetry = { permissionDenied = false; permissionLauncher.launch(android.Manifest.permission.CAMERA) },
             modifier = modifier
         )
         captureError != null -> ErrorState(
-            message = captureError!!,
-            onRetry = { captureError = null },
+            message = captureError!!.userMessage,
+            onRetry = if (captureError!!.recoverable) ({ captureError = null }) else null,
             modifier = modifier
         )
         !hasPermission -> Box(modifier = modifier.fillMaxSize()) {
@@ -128,7 +129,7 @@ fun CameraCaptureScreen(
                                     }
                                 }
                                 override fun onError(exception: ImageCaptureException) {
-                                    captureError = exception.message ?: "Capture failed"
+                                    captureError = AppError.CameraUnavailable
                                 }
                             }
                         )
@@ -173,8 +174,8 @@ fun CameraCaptureScreen(
                                 preview,
                                 imageCaptureUseCase
                             )
-                        } catch (e: Exception) {
-                            captureError = e.message ?: "Camera failed"
+                        } catch (_: Exception) {
+                            captureError = AppError.CameraUnavailable
                         }
                     }, ContextCompat.getMainExecutor(context))
                     onDispose {
