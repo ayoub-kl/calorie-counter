@@ -233,14 +233,14 @@ Analyze → AnalysisLoading
 ------------------------------------------------------------
 PROMPT 7 — BACKEND API CONTRACT
 ------------------------------------------------------------
-Implement networking layer.
+Implement the networking layer for meal analysis.
 
 Tasks:
-1. Retrofit service:
-   analyzeMealPhoto()
+1. Create Retrofit service method:
+   analyzeMealPhoto(...)
 
-2. DTO models:
-- foods detected
+2. Define request / response DTO models for:
+- detected foods
 - calories
 - protein
 - carbs
@@ -248,13 +248,41 @@ Tasks:
 - quantity
 - confidence
 
-3. Repository method:
+3. Implement repository method:
 analyzeMealPhoto(imageUri, mealType)
 
-Rules:
+Requirements:
 Validate AI responses.
-Handle null fields.
-Normalize numbers.
+Handle null or missing fields safely.
+Normalize numeric values.
+
+Rules:
+- define the request format clearly
+- use multipart upload if image upload is required
+- map DTO models to domain models
+- do NOT expose DTOs directly to UI
+- keep the project buildable
+
+
+
+------------------------------------------------------------
+PROMPT 16 — IMAGE COMPRESSION
+------------------------------------------------------------
+Implement compression before upload.
+
+Requirements:
+- reduce image resolution before upload
+- preserve recognition quality
+- avoid large uploads
+- keep memory usage safe
+- return a compressed file or URI suitable for upload
+
+Rules:
+- do not break the existing camera flow
+- integrate compression inside repository or upload pipeline
+- do not modify unrelated screens
+
+
 
 ------------------------------------------------------------
 PROMPT 8 — ANALYSIS LOADING SCREEN
@@ -262,9 +290,10 @@ PROMPT 8 — ANALYSIS LOADING SCREEN
 Implement Analysis Loading.
 
 Behavior:
-1. Call analyzeMealPhoto()
-2. Show loading animation
-3. Handle errors
+1. Read captured image URI and meal type from shared state.
+2. Call analyzeMealPhoto()
+3. Show loading animation
+4. Handle errors
 
 States:
 - loading
@@ -272,7 +301,14 @@ States:
 - invalid response
 - success
 
-On success navigate to MealResult.
+Requirements:
+- trigger analysis only once per entry
+- avoid duplicate API calls caused by recomposition
+- store analysis result in shared state
+- on success navigate to MealResult
+- on error show retry UI
+
+
 
 ------------------------------------------------------------
 PROMPT 9 — MEAL RESULT SCREEN
@@ -298,6 +334,13 @@ Actions:
 - add food
 - save meal
 
+Rules:
+- read data from ViewModel state
+- do not call the API directly from this screen
+- handle partial or empty AI responses safely
+
+
+
 ------------------------------------------------------------
 PROMPT 10 — MEAL EDITING
 ------------------------------------------------------------
@@ -312,6 +355,9 @@ User can:
 Rules:
 Totals update automatically.
 Mark meal as userEdited.
+Edits update the same shared ViewModel state used by MealResult.
+
+
 
 ------------------------------------------------------------
 PROMPT 11 — ROOM DATABASE
@@ -342,6 +388,14 @@ FoodItem fields:
 - carbs
 - fat
 
+Also implement:
+- DAO interfaces
+- RoomDatabase
+- meal-with-foods relation model
+- repository persistence methods
+
+
+
 ------------------------------------------------------------
 PROMPT 12 — SAVE MEAL
 ------------------------------------------------------------
@@ -352,8 +406,15 @@ MealResult → Save
 
 Tasks:
 1. Map domain models to Room entities
-2. Insert meal and foods
+2. Insert meal and foods using a transaction
 3. Return success state
+
+Requirements:
+- preserve userEdited flag
+- save totals from edited state
+- avoid duplicate inserts from repeated taps
+
+
 
 ------------------------------------------------------------
 PROMPT 13 — MEAL HISTORY
@@ -366,7 +427,14 @@ Features:
 - calories
 - timestamp
 
+States:
+- loading
+- empty history
+- error state
+
 Click item → MealDetail
+
+
 
 ------------------------------------------------------------
 PROMPT 14 — MEAL DETAIL
@@ -379,7 +447,12 @@ Display:
 - macros
 - totals
 
-Allow editing if userEdited.
+Behavior:
+- read data from Room database
+- allow editing when appropriate
+- update totals when foods change
+
+
 
 ------------------------------------------------------------
 PROMPT 15 — ERROR HANDLING
@@ -394,17 +467,12 @@ Handle:
 - invalid AI response
 - database error
 
-
-
-------------------------------------------------------------
-PROMPT 16 — IMAGE COMPRESSION
-------------------------------------------------------------
-Implement compression before upload.
-
 Requirements:
-- reduce resolution
-- keep recognition quality
-- avoid large uploads
+- create a shared error model used across repository, ViewModel, and UI
+- avoid scattered string errors
+- standardize error display states
+
+
 
 ------------------------------------------------------------
 PROMPT 17 — UNIT TESTS
@@ -416,6 +484,12 @@ Add tests for:
 - repository logic
 - ViewModel states
 
+Requirements:
+- isolate tests from UI
+- mock networking and database layers
+
+
+
 ------------------------------------------------------------
 PROMPT 18 — PERFORMANCE
 ------------------------------------------------------------
@@ -425,6 +499,13 @@ Focus:
 - bitmap memory
 - recompositions
 - loading states
+- avoid redundant API calls
+
+Rules:
+- do not change app behavior
+- keep changes minimal
+
+
 
 ------------------------------------------------------------
 PROMPT 19 — FINAL QA PASS
@@ -437,3 +518,8 @@ Tasks:
 - verify architecture rules
 - verify UI states
 - check navigation safety
+
+Return:
+- files changed
+- issues fixed
+- remaining risks

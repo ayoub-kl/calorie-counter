@@ -1,29 +1,24 @@
-Review the code you just added for compile issues, navigation issues, missing imports, state issues, and architecture violations.
+Review only the files changed in the last task.
 
-Tasks:
-1. Fix all compile problems
-2. Fix navigation route mismatches
-3. Fix ViewModel wiring issues
-4. Fix Compose errors and missing imports
-5. Keep the project buildable
+Check only:
+1. compile issues
+2. missing imports
+3. callback wiring
+4. route mismatches
+5. obvious state issues
 
-Do not add new features.
-Return:
-- files changed
-- fixes made
-- remaining risks
+Rules:
+- keep changes minimal
+- do not add features
+- do not refactor unrelated code
+
+Then:
+- fix any issues found
+- run a full build
+- return:
+  - files changed
+  - fixes made
+  - remaining risks
 
 
-
-//////////////////////////////////////////
-
-After completing the task:
-1. Review all changed files for compile errors, unresolved references, and architectural inconsistencies.
-2. Run a full build and fix any issues found.
-3. Check for navigation bugs, state handling issues, missing imports, invalid Compose API usage, and placeholder UI that should no longer be present.
-4. Keep changes aligned with the existing project structure and previous prompts.
-5. Summarize exactly what was changed and list any remaining risks.
-
-//////////////////////////////////////////////////////////
-
-Now audit your own changes carefully. Look for build issues, bad imports, wrong package usage, broken navigation, invalid Compose APIs, state bugs, preview-only code leaking into runtime, and clean-architecture violations. Fix everything you find, then give me a final summary.
+7 → 16 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 17 → 18 → 19

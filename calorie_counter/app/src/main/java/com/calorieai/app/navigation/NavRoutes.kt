@@ -1,5 +1,7 @@
 package com.calorieai.app.navigation
 
+import java.nio.charset.StandardCharsets.UTF_8
+
 /**
  * Stable route names for the app. Pass only minimal arguments (IDs, URIs).
  * Do not pass bitmaps or heavy objects through navigation.
@@ -20,4 +22,10 @@ object NavRoutes {
 
     /** Route with mealId argument. Use for navigating to a specific meal. */
     fun mealDetail(mealId: String) = "meal_detail/$mealId"
+
+    /** Route with image URI (base64-encoded in path). Use after camera capture. */
+    fun photoReviewWithImage(imageUri: String): String {
+        val encoded = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(imageUri.toByteArray(UTF_8))
+        return "photo_review/$encoded"
+    }
 }

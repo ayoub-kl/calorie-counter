@@ -6,10 +6,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import java.util.Base64
 import com.calorieai.app.ui.screens.AnalysisLoadingScreen
 import com.calorieai.app.ui.screens.CameraCaptureScreen
+import com.calorieai.app.ui.screens.DashboardScreen
 import com.calorieai.app.ui.screens.HistoryScreen
-import com.calorieai.app.ui.screens.HomeScreen
 import com.calorieai.app.ui.screens.MealDetailScreen
 import com.calorieai.app.ui.screens.MealEditScreen
 import com.calorieai.app.ui.screens.MealResultScreen
@@ -24,7 +25,7 @@ fun CalorieCounterNavHost(navController: NavHostController) {
         startDestination = NavRoutes.MEAL_TYPE_SELECT
     ) {
         composable(NavRoutes.HOME) {
-            HomeScreen(
+            DashboardScreen(
                 onNavigateToMealTypeSelect = { navController.navigate(NavRoutes.MEAL_TYPE_SELECT) },
                 onNavigateToHistory = { navController.navigate(NavRoutes.HISTORY) },
                 onNavigateToSettings = { navController.navigate(NavRoutes.SETTINGS) }
@@ -41,12 +42,22 @@ fun CalorieCounterNavHost(navController: NavHostController) {
         composable(NavRoutes.CAMERA_CAPTURE) {
             CameraCaptureScreen(
                 onNavigateBack = { navController.navigateUp() },
-                onPhotoCaptured = { navController.navigate(NavRoutes.PHOTO_REVIEW) }
+                onPhotoCaptured = { uri -> navController.navigate(NavRoutes.photoReviewWithImage(uri)) }
             )
         }
 
-        composable(NavRoutes.PHOTO_REVIEW) {
+        composable(
+            route = "${NavRoutes.PHOTO_REVIEW}/{imageUri}",
+            arguments = listOf(navArgument("imageUri") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val encoded = backStackEntry.arguments?.getString("imageUri") ?: ""
+            val imageUri = try {
+                String(Base64.getUrlDecoder().decode(encoded), java.nio.charset.StandardCharsets.UTF_8)
+            } catch (_: Exception) {
+                ""
+            }
             PhotoReviewScreen(
+                imageUri = imageUri,
                 onNavigateBack = { navController.navigateUp() },
                 onConfirm = { navController.navigate(NavRoutes.ANALYSIS_LOADING) },
                 onRetake = { navController.navigateUp() }
