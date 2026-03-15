@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -45,6 +46,11 @@ fun MealResultScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isSaving by viewModel.isSaving.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.saveSuccess.collect { onSave() }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -83,7 +89,7 @@ fun MealResultScreen(
                 Spacer(modifier = Modifier.height(24.dp))
                 SecondaryButton(text = "Add food", onClick = { viewModel.addFood() })
                 Spacer(modifier = Modifier.height(8.dp))
-                PrimaryButton(text = "Save meal", onClick = onSave)
+                PrimaryButton(text = "Save meal", onClick = { viewModel.saveMeal() }, enabled = !isSaving)
             }
             else -> Column(
                 modifier = Modifier
@@ -132,7 +138,7 @@ fun MealResultScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 SecondaryButton(text = "Add food", onClick = { viewModel.addFood() })
                 Spacer(modifier = Modifier.height(8.dp))
-                PrimaryButton(text = "Save meal", onClick = onSave)
+                PrimaryButton(text = "Save meal", onClick = { viewModel.saveMeal() }, enabled = !isSaving)
                 Spacer(modifier = Modifier.height(24.dp))
             }
         }
