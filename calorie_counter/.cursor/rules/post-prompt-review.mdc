@@ -1,0 +1,34 @@
+---
+description: After every "run prompt" or "run next prompt" execution, automatically run a focused review on only the files changed in that task, fix issues, and return a short summary.
+alwaysApply: true
+---
+
+# Post-prompt review
+
+After completing any "run prompt" or "run next prompt" task, immediately run the following review on **only the files changed in that task**.
+
+## Checks
+
+1. Compile issues
+2. Missing imports
+3. Callback wiring
+4. Route mismatches
+5. Obvious state issues
+
+## Constraints
+
+- Keep changes minimal
+- Do not add features
+- Do not refactor unrelated code
+- Do not inspect or change files not touched by the last task
+
+## Steps
+
+1. Read each changed file.
+2. Run `ReadLints` on each changed file.
+3. Fix only what is required for the five checks above.
+4. Ask the developer to run a full build (do NOT run Gradle yourself — see build_rules.md).
+5. Return only:
+   - **Files changed** (by both the prompt and the review)
+   - **Fixes made**
+   - **Remaining risks**

@@ -1,0 +1,13 @@
+---
+description: Order of prompts when user says "run next prompt" — follow file order, not label
+alwaysApply: true
+---
+
+# Prompt execution order
+
+When the user says "run next prompt" (or equivalent), determine which prompt to run by **the order prompts appear in the prompts file**, not by the numeric label in the prompt header.
+
+- **Correct**: Next prompt = the next block after the last-run prompt in the file (e.g. after Prompt 7, next is Prompt 16 if that is the next block in the file).
+- **Wrong**: Using label order (e.g. assuming after Prompt 7 comes Prompt 8).
+
+The prompts file is the project's canonical list (e.g. `cursor_android_calorie_app_prompts.txt`). Follow its physical order top to bottom.
