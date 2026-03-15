@@ -82,6 +82,7 @@ fun PhotoReviewScreen(
                     AsyncImage(
                         model = ImageRequest.Builder(context)
                             .data(requireNotNull(uri))
+                            .size(1080, 1080)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Captured meal photo",

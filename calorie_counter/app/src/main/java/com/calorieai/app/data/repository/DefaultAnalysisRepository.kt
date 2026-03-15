@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
@@ -31,27 +32,33 @@ class DefaultAnalysisRepository @Inject constructor(
         imageUri: String
     ): Result<MealAnalysisResult> = runCatching {
         val uri = Uri.parse(imageUri)
-        val part = withContext(Dispatchers.IO) {
+        val (part, tempFile) = withContext(Dispatchers.IO) {
             context.createImagePart(uri) ?: throw IllegalArgumentException("Could not read image from URI")
         }
-        val mealTypeBody = mealType.name.toRequestBody("text/plain".toMediaTypeOrNull())
-        val response = api.analyzeMealPhoto(part, mealTypeBody)
-        val captureTimestamp = System.currentTimeMillis()
-        AnalysisMapper.toDomain(
-            dto = response,
-            mealType = mealType,
-            captureTimestamp = captureTimestamp,
-            imageUri = imageUri
-        ).getOrThrow()
+        try {
+            val mealTypeBody = mealType.name.toRequestBody("text/plain".toMediaTypeOrNull())
+            val response = api.analyzeMealPhoto(part, mealTypeBody)
+            val captureTimestamp = System.currentTimeMillis()
+            AnalysisMapper.toDomain(
+                dto = response,
+                mealType = mealType,
+                captureTimestamp = captureTimestamp,
+                imageUri = imageUri
+            ).getOrThrow()
+        } finally {
+            withContext(Dispatchers.IO) { tempFile.delete() }
+        }
     }
 }
 
 /**
  * Creates a multipart part from a content URI. Compresses the image first (resize + JPEG)
  * to reduce upload size and memory; falls back to stream copy if compression fails.
+ * Uses file-backed request body to avoid holding full image bytes in memory.
+ * Returns (Part, tempFile); caller must delete tempFile after upload.
  * Call from IO dispatcher.
  */
-private fun Context.createImagePart(uri: Uri): MultipartBody.Part? {
+private fun Context.createImagePart(uri: Uri): Pair<MultipartBody.Part, File>? {
     val fileToUpload = compressImageForUpload(this, uri)
         ?: run {
             val stream = contentResolver.openInputStream(uri) ?: return null
@@ -64,8 +71,7 @@ private fun Context.createImagePart(uri: Uri): MultipartBody.Part? {
                 return null
             }
         }
-    val bytes = fileToUpload.readBytes()
-    fileToUpload.delete()
-    val body = bytes.toRequestBody("image/jpeg".toMediaTypeOrNull())
-    return MultipartBody.Part.createFormData("image", fileToUpload.name, body)
+    val body = fileToUpload.asRequestBody("image/jpeg".toMediaTypeOrNull())
+    val part = MultipartBody.Part.createFormData("image", fileToUpload.name, body)
+    return part to fileToUpload
 }
