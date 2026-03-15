@@ -74,6 +74,23 @@ class MealResultViewModel @Inject constructor(
         )
     }
 
+    fun updateFood(id: String, quantity: Double, unit: String) {
+        val current = _uiState.value
+        val newFoods = current.foods.map { item ->
+            if (item.id == id) item.copy(
+                quantity = quantity.coerceAtLeast(0.0),
+                unit = unit.ifBlank { "serving" }
+            ) else item
+        }
+        if (newFoods == current.foods) return
+        _uiState.value = current.copy(
+            foods = newFoods,
+            totals = computeTotals(newFoods),
+            userEdited = true,
+            error = null
+        )
+    }
+
     private fun computeTotals(foods: List<FoodItem>): NutritionTotals = NutritionTotals(
         calories = foods.sumOf { it.calories },
         proteinG = foods.sumOf { it.proteinG },

@@ -1,8 +1,6 @@
 package com.calorieai.app.navigation
 
-import java.net.URLDecoder
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets.UTF_8
+import android.net.Uri
 
 /**
  * Stable route names for the app. Pass only minimal arguments (IDs, URIs).
@@ -30,19 +28,19 @@ object NavRoutes {
 
     /** Route with meal type and URI-encoded image URI. Use after camera capture. */
     fun photoReviewWithImage(mealType: String, imageUri: String): String {
-        val encoded = URLEncoder.encode(imageUri, UTF_8).replace("+", "%20")
+        val encoded = Uri.encode(imageUri)
         return "photo_review/$mealType/$encoded"
     }
 
     /** Route with meal type and URI-encoded image URI. Use when starting analysis. */
     fun analysisLoading(mealType: String, imageUri: String): String {
-        val encoded = URLEncoder.encode(imageUri, UTF_8).replace("+", "%20")
+        val encoded = Uri.encode(imageUri)
         return "analysis_loading/$mealType/$encoded"
     }
 
     /** Decode imageUri read from navigation arguments or SavedStateHandle. */
     fun decodeImageUriFromRoute(encoded: String): String = try {
-        if (encoded.isBlank()) "" else URLDecoder.decode(encoded, UTF_8)
+        if (encoded.isBlank()) "" else Uri.decode(encoded)
     } catch (_: Exception) {
         ""
     }

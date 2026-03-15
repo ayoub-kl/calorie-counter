@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,4 +17,21 @@ interface MealDao {
 
     @Query("SELECT * FROM meals ORDER BY createdAt DESC")
     fun observeAll(): Flow<List<MealEntity>>
+
+    @Transaction
+    @Query("SELECT * FROM meals WHERE id = :id")
+    suspend fun getMealWithFoodsById(id: String): MealWithFoodItems?
+
+    @Transaction
+    @Query("SELECT * FROM meals ORDER BY createdAt DESC")
+    fun observeAllWithFoods(): Flow<List<MealWithFoodItems>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFoodItems(items: List<MealFoodItemEntity>)
+
+    @Transaction
+    suspend fun insertMealWithFoods(meal: MealEntity, foodItems: List<MealFoodItemEntity>) {
+        insert(meal)
+        insertFoodItems(foodItems)
+    }
 }

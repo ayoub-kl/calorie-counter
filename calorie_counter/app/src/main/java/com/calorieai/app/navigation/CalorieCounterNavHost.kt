@@ -1,6 +1,8 @@
 package com.calorieai.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,6 +18,7 @@ import com.calorieai.app.ui.screens.MealResultScreen
 import com.calorieai.app.ui.screens.MealTypeSelectScreen
 import com.calorieai.app.ui.screens.PhotoReviewScreen
 import com.calorieai.app.ui.screens.SettingsScreen
+import com.calorieai.app.presentation.mealresult.MealResultViewModel
 
 @Composable
 fun CalorieCounterNavHost(navController: NavHostController) {
@@ -92,10 +95,15 @@ fun CalorieCounterNavHost(navController: NavHostController) {
             )
         }
 
-        composable(NavRoutes.MEAL_EDIT) {
+        composable(NavRoutes.MEAL_EDIT) { entry ->
+            val parentEntry = remember(entry) {
+                navController.getBackStackEntry(NavRoutes.MEAL_RESULT)
+            }
+            val sharedViewModel: MealResultViewModel = hiltViewModel(parentEntry)
             MealEditScreen(
                 onNavigateBack = { navController.navigateUp() },
-                onSave = { navController.navigateUp() }
+                onSave = { navController.navigateUp() },
+                viewModel = sharedViewModel
             )
         }
 
