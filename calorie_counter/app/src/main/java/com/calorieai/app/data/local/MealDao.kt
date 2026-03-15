@@ -23,6 +23,10 @@ interface MealDao {
     suspend fun getMealWithFoodsById(id: String): MealWithFoodItems?
 
     @Transaction
+    @Query("SELECT * FROM meals WHERE id = :id")
+    fun observeMealWithFoodsById(id: String): Flow<MealWithFoodItems?>
+
+    @Transaction
     @Query("SELECT * FROM meals ORDER BY createdAt DESC")
     fun observeAllWithFoods(): Flow<List<MealWithFoodItems>>
 

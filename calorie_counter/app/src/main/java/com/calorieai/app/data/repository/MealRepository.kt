@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface MealRepository {
     fun observeAllMeals(): Flow<List<Meal>>
+    fun observeMealById(id: String): Flow<Meal?>
     suspend fun getMealById(id: String): Meal?
     suspend fun saveMeal(meal: Meal)
 }

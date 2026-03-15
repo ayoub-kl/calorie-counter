@@ -20,6 +20,9 @@ class DefaultMealRepository @Inject constructor(
     override fun observeAllMeals(): Flow<List<Meal>> =
         mealDao.observeAllWithFoods().map { list -> list.map { toMeal(it) } }
 
+    override fun observeMealById(id: String): Flow<Meal?> =
+        mealDao.observeMealWithFoodsById(id).map { it?.let { w -> toMeal(w) } }
+
     override suspend fun getMealById(id: String): Meal? =
         mealDao.getMealWithFoodsById(id)?.let { toMeal(it) }
 

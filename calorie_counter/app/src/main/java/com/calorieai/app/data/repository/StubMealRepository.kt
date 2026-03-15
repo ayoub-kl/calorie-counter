@@ -12,6 +12,8 @@ class StubMealRepository @Inject constructor() : MealRepository {
 
     override fun observeAllMeals(): Flow<List<Meal>> = flowOf(emptyList())
 
+    override fun observeMealById(id: String): Flow<Meal?> = flowOf(null)
+
     override suspend fun getMealById(id: String): Meal? = null
 
     override suspend fun saveMeal(meal: Meal) {
