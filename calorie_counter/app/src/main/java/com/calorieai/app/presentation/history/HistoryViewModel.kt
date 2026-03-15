@@ -19,9 +19,17 @@ class HistoryViewModel @Inject constructor(
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
     init {
+        _uiState.value = _uiState.value.copy(isLoading = true)
         viewModelScope.launch {
-            getMealsUseCase.invoke().collect { meals ->
-                _uiState.value = _uiState.value.copy(meals = meals, isLoading = false)
+            try {
+                getMealsUseCase.invoke().collect { meals ->
+                    _uiState.value = _uiState.value.copy(meals = meals, isLoading = false, error = null)
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = e.message ?: "Failed to load history"
+                )
             }
         }
     }
