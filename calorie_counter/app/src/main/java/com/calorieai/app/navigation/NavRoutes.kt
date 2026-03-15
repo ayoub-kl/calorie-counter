@@ -1,5 +1,7 @@
 package com.calorieai.app.navigation
 
+import java.net.URLDecoder
+import java.net.URLEncoder
 import java.nio.charset.StandardCharsets.UTF_8
 
 /**
@@ -23,9 +25,25 @@ object NavRoutes {
     /** Route with mealId argument. Use for navigating to a specific meal. */
     fun mealDetail(mealId: String) = "meal_detail/$mealId"
 
-    /** Route with image URI (base64-encoded in path). Use after camera capture. */
-    fun photoReviewWithImage(imageUri: String): String {
-        val encoded = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(imageUri.toByteArray(UTF_8))
-        return "photo_review/$encoded"
+    /** Route with meal type. Use when navigating from meal type selection to camera. */
+    fun cameraCaptureWithMealType(mealType: String) = "camera_capture/$mealType"
+
+    /** Route with meal type and URI-encoded image URI. Use after camera capture. */
+    fun photoReviewWithImage(mealType: String, imageUri: String): String {
+        val encoded = URLEncoder.encode(imageUri, UTF_8).replace("+", "%20")
+        return "photo_review/$mealType/$encoded"
+    }
+
+    /** Route with meal type and URI-encoded image URI. Use when starting analysis. */
+    fun analysisLoading(mealType: String, imageUri: String): String {
+        val encoded = URLEncoder.encode(imageUri, UTF_8).replace("+", "%20")
+        return "analysis_loading/$mealType/$encoded"
+    }
+
+    /** Decode imageUri read from navigation arguments or SavedStateHandle. */
+    fun decodeImageUriFromRoute(encoded: String): String = try {
+        if (encoded.isBlank()) "" else URLDecoder.decode(encoded, UTF_8)
+    } catch (_: Exception) {
+        ""
     }
 }

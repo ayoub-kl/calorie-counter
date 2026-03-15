@@ -6,7 +6,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import java.util.Base64
 import com.calorieai.app.ui.screens.AnalysisLoadingScreen
 import com.calorieai.app.ui.screens.CameraCaptureScreen
 import com.calorieai.app.ui.screens.DashboardScreen
@@ -35,36 +34,46 @@ fun CalorieCounterNavHost(navController: NavHostController) {
         composable(NavRoutes.MEAL_TYPE_SELECT) {
             MealTypeSelectScreen(
                 onNavigateBack = { navController.navigateUp() },
-                onMealTypeSelected = { navController.navigate(NavRoutes.CAMERA_CAPTURE) }
-            )
-        }
-
-        composable(NavRoutes.CAMERA_CAPTURE) {
-            CameraCaptureScreen(
-                onNavigateBack = { navController.navigateUp() },
-                onPhotoCaptured = { uri -> navController.navigate(NavRoutes.photoReviewWithImage(uri)) }
+                onMealTypeSelected = { mealType -> navController.navigate(NavRoutes.cameraCaptureWithMealType(mealType)) }
             )
         }
 
         composable(
-            route = "${NavRoutes.PHOTO_REVIEW}/{imageUri}",
-            arguments = listOf(navArgument("imageUri") { type = NavType.StringType })
+            route = "${NavRoutes.CAMERA_CAPTURE}/{mealType}",
+            arguments = listOf(navArgument("mealType") { type = NavType.StringType })
         ) { backStackEntry ->
+            val mealType = backStackEntry.arguments?.getString("mealType") ?: ""
+            CameraCaptureScreen(
+                onNavigateBack = { navController.navigateUp() },
+                onPhotoCaptured = { uri -> navController.navigate(NavRoutes.photoReviewWithImage(mealType, uri)) }
+            )
+        }
+
+        composable(
+            route = "${NavRoutes.PHOTO_REVIEW}/{mealType}/{imageUri}",
+            arguments = listOf(
+                navArgument("mealType") { type = NavType.StringType },
+                navArgument("imageUri") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val mealType = backStackEntry.arguments?.getString("mealType") ?: ""
             val encoded = backStackEntry.arguments?.getString("imageUri") ?: ""
-            val imageUri = try {
-                String(Base64.getUrlDecoder().decode(encoded), java.nio.charset.StandardCharsets.UTF_8)
-            } catch (_: Exception) {
-                ""
-            }
+            val imageUri = NavRoutes.decodeImageUriFromRoute(encoded)
             PhotoReviewScreen(
                 imageUri = imageUri,
                 onNavigateBack = { navController.navigateUp() },
-                onConfirm = { navController.navigate(NavRoutes.ANALYSIS_LOADING) },
+                onConfirm = { navController.navigate(NavRoutes.analysisLoading(mealType, imageUri)) },
                 onRetake = { navController.navigateUp() }
             )
         }
 
-        composable(NavRoutes.ANALYSIS_LOADING) {
+        composable(
+            route = "${NavRoutes.ANALYSIS_LOADING}/{mealType}/{imageUri}",
+            arguments = listOf(
+                navArgument("mealType") { type = NavType.StringType },
+                navArgument("imageUri") { type = NavType.StringType }
+            )
+        ) {
             AnalysisLoadingScreen(
                 onNavigateBack = { navController.navigateUp() },
                 onAnalysisComplete = {
